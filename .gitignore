@@ -1,0 +1,7 @@
+*.pgm
+.vscode
+*.o
+*.so
+*.pdf
+imageops
+sample_filters/

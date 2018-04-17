@@ -129,7 +129,7 @@ namespace WHTMIC023 {
                 }
 
                 bool operator!=(const iterator & rhs) { // !=
-                    if (*ptr == *(rhs.ptr))
+                    if (ptr == rhs.ptr)
                         return false;
 
                     else return true;

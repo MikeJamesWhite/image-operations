@@ -32,7 +32,7 @@ int main(int argc, char * argv []) {
         Image i1( (string(argv[2])) );
         Image i2( (string(argv[3])) );
 
-        Image outputImg = Image::add(i1, i2);
+        Image outputImg = std::move(Image::add(i1, i2));
 
         cout << "Operation complete!" << endl << endl;
 
@@ -48,7 +48,7 @@ int main(int argc, char * argv []) {
         Image i1( (string(argv[2])) );
         Image i2( (string(argv[3])) );
 
-        Image outputImg = Image::subtract(i1, i2);
+        Image outputImg = std::move(Image::subtract(i1, i2));
 
         cout << "Operation complete!" << endl << endl;
 
@@ -63,7 +63,7 @@ int main(int argc, char * argv []) {
         }
         Image i( (string(argv[2])) );
 
-        Image outputImg = Image::invert(i);
+        Image outputImg = std::move(Image::invert(i));
 
         cout << "Operation complete!" << endl << endl;
 
@@ -79,7 +79,7 @@ int main(int argc, char * argv []) {
         Image i1( (string(argv[2])) );
         Image i2( (string(argv[3])) );
 
-        Image outputImg = Image::mask(i1, i2);
+        Image outputImg = std::move(Image::mask(i1, i2));
 
         cout << "Operation complete!" << endl << endl;
 
@@ -98,7 +98,7 @@ int main(int argc, char * argv []) {
         istringstream iss ( (string(argv[3])) );
         iss >> t;
 
-        Image outputImg = Image::threshold(i, t);
+        Image outputImg = std::move(Image::threshold(i, t));
 
         cout << "Operation complete!" << endl << endl;
 

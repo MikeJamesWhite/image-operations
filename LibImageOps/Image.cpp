@@ -142,8 +142,8 @@ Image Image::invert(Image& i) {
     
     Image returnImg = i;
     
-    for (auto iter = i.begin(); iter != i.end(); iter++) {
-        *iter = (u_char) 255 - *iter;
+    for (auto iter = returnImg.begin(); iter != returnImg.end(); iter++) {
+        *iter = (255 - *iter);
     }
 
     return returnImg;
@@ -176,7 +176,7 @@ Image Image::threshold(Image& i, int f) {
 
     Image returnImg = i;
     
-    for (auto iter = i.begin(); iter != i.end(); iter++) {
+    for (auto iter = returnImg.begin(); iter != returnImg.end(); iter++) {
         if(*iter > f)
             *iter = 255;
         else

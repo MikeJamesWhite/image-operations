@@ -24,7 +24,7 @@ clean:
 
 add: $(TARGET)
 	export LD_LIBRARY_PATH=$(LIB)/; \
-	./$(TARGET) -a donkey_mask.pgm shrek_rectangular.pgm output.pgm
+	./$(TARGET) -a shrek_rectangular.pgm donkey_mask.pgm output.pgm
 
 subtract: $(TARGET)
 	export LD_LIBRARY_PATH=$(LIB)/; \

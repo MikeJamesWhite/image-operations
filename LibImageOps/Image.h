@@ -40,15 +40,15 @@ namespace WHTMIC023 {
 
             // IMAGE OPERATIONS
 
-            static Image& add(Image& i1, Image& i2);
+            static Image add( Image& i1,  Image& i2);
 
-            static Image& subtract(Image& i1, Image& i2);
+            static Image subtract( Image& i1,  Image& i2);
 
-            static Image& invert(Image& i);
+            static Image invert( Image& i);
 
-            static Image& mask(Image& i1, Image& i2);
+            static Image mask( Image& i1,  Image& i2);
 
-            static Image& threshold(Image& i, int t);
+            static Image threshold( Image& i, int t);
 
             // IO
 
@@ -58,23 +58,23 @@ namespace WHTMIC023 {
 
             // OPERATOR OVERLOADS
 
-            Image& operator+(Image& rhs) { // add
+            Image&& operator+( Image& rhs) { // add
                 return add(*this, rhs);
             }
 
-            Image& operator-(Image& rhs) { // subtract
+            Image&& operator-( Image& rhs) { // subtract
                 return subtract(*this, rhs);
             }
 
-            Image& operator!() { // invert
+            Image&& operator!() { // invert
                 return invert(*this);
             }
 
-            Image& operator/(Image& rhs) { // mask
+            Image&& operator/( Image& rhs) { // mask
                 return mask(*this, rhs);
             }
 
-            Image& operator*(int rhs) { // threshold
+            Image&& operator*( int rhs) { // threshold
                 return threshold(*this, rhs);
             }
 
@@ -89,10 +89,9 @@ namespace WHTMIC023 {
                 iterator(u_char *p) : ptr(p) {}
 
             public:
-                //copy construct is public
-                iterator( const iterator & rhs) : ptr(rhs.ptr) {}
+                iterator( const iterator & rhs) : ptr(rhs.ptr) {} // copy constructor
                 
-                // define overloaded ops: *, ++, --, =
+                // OPERATOR OVERLOADS
                 iterator & operator=(const iterator & rhs) {
                     if (this != &rhs)
                         ptr = rhs.ptr;
@@ -103,25 +102,39 @@ namespace WHTMIC023 {
                     return *ptr;
                 }
 
-                void operator++() {
+                iterator& operator++() { // prefix ++
                     ptr++;
+                    return *this;
                 }
 
-                void operator--() {
+                iterator& operator++(int rhs) { // postfix ++
+                    return ++(*this);
+                }       
+
+                iterator& operator--() {  // prefix --
                     ptr--;
+                    return *this;
                 }
 
-                bool operator==(const iterator & rhs) {
-                    if (*ptr = *(rhs.ptr))
-                        return true;
+                iterator& operator--(int rhs) {  // postfix --
+                    return --(*this);
+                }
 
-                    else return false;
+                bool operator!=(const iterator & rhs) { // !=
+                    if (*ptr == *(rhs.ptr))
+                        return false;
+
+                    else return true;
+                }
+
+                bool operator==(const iterator & rhs) { // ==
+                    return !(*this != rhs);
                 }
 
                 // other methods for iterator
 
         };
-
+        
         iterator begin(void) { return iterator(data.get()); }
 
         iterator end(void) { return iterator(data.get() + (width * height)); }

@@ -48,7 +48,7 @@ namespace WHTMIC023 {
 
             static Image mask( Image& i1,  Image& i2);
 
-            static Image threshold( Image& i, int t);
+            static Image threshold( Image& i, int f);
 
             // IO
 
@@ -58,24 +58,32 @@ namespace WHTMIC023 {
 
             // OPERATOR OVERLOADS
 
-            Image&& operator+( Image& rhs) { // add
+            Image operator+( Image& rhs) { // add
                 return add(*this, rhs);
             }
 
-            Image&& operator-( Image& rhs) { // subtract
+            Image operator-( Image& rhs) { // subtract
                 return subtract(*this, rhs);
             }
 
-            Image&& operator!() { // invert
+            Image operator!() { // invert
                 return invert(*this);
             }
 
-            Image&& operator/( Image& rhs) { // mask
+            Image operator/( Image& rhs) { // mask
                 return mask(*this, rhs);
             }
 
-            Image&& operator*( int rhs) { // threshold
+            Image operator*( int rhs) { // threshold
                 return threshold(*this, rhs);
+            }
+
+            void operator<<(string inFile) {
+                load(inFile);
+            }
+
+            void operator>>(string outFile) {
+                save(outFile);
             }
 
         // nested iterator class for working with images

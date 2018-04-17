@@ -23,7 +23,6 @@ int main(int argc, char * argv []) {
     cout << "-----------------------------------------------" << endl << endl;
     
     string option = string(argv[1]);
-    Image outputImg;
 
     if (option == "-a") { // option -a: add images
         if (argc != 5) {
@@ -33,7 +32,12 @@ int main(int argc, char * argv []) {
         Image i1( (string(argv[2])) );
         Image i2( (string(argv[3])) );
 
-        outputImg = Image::add(i1, i2);
+        Image outputImg = Image::add(i1, i2);
+
+        cout << "Operation complete!" << endl << endl;
+
+        outputImg.save(argv[argc-1]);
+        cout << "Done!" << endl;
     }
 
     else if (option == "-s") { // option -s: subtract images
@@ -44,7 +48,12 @@ int main(int argc, char * argv []) {
         Image i1( (string(argv[2])) );
         Image i2( (string(argv[3])) );
 
-        outputImg = Image::subtract(i1, i2);
+        Image outputImg = Image::subtract(i1, i2);
+
+        cout << "Operation complete!" << endl << endl;
+
+        outputImg.save(argv[argc-1]);
+        cout << "Done!" << endl;
     }
 
     else if (option == "-i") { // option -i: invert image
@@ -54,7 +63,12 @@ int main(int argc, char * argv []) {
         }
         Image i( (string(argv[2])) );
 
-        outputImg = Image::invert(i);
+        Image outputImg = Image::invert(i);
+
+        cout << "Operation complete!" << endl << endl;
+
+        outputImg.save(argv[argc-1]);
+        cout << "Done!" << endl;
     }
 
     else if (option == "-l") { // option -l: mask image
@@ -65,11 +79,16 @@ int main(int argc, char * argv []) {
         Image i1( (string(argv[2])) );
         Image i2( (string(argv[3])) );
 
-        outputImg = Image::mask(i1, i2);
+        Image outputImg = Image::mask(i1, i2);
+
+        cout << "Operation complete!" << endl << endl;
+
+        outputImg.save(argv[argc-1]);
+        cout << "Done!" << endl;
     }
 
     else if (option == "-t") { // option -t: threshold image
-        if (argc != 4) {
+        if (argc != 5) {
             cout << "Incorrect number of arguments for option " + option + "!" << endl;
             return 2;
         }
@@ -79,18 +98,18 @@ int main(int argc, char * argv []) {
         istringstream iss ( (string(argv[3])) );
         iss >> t;
 
-        outputImg = Image::threshold(i, t);
+        Image outputImg = Image::threshold(i, t);
+
+        cout << "Operation complete!" << endl << endl;
+
+        outputImg.save(argv[argc-1]);
+        cout << "Done!" << endl;
     }
 
     else {
         cout << "Unrecognised commandline option!" << endl;
         return 1;
     }
-
-    cout << "Operation complete!" << endl;
-
-    outputImg.save(argv[argc-1]);
-    cout << "Outputted to file!" << endl;
 
     return 0;
 }

@@ -30,8 +30,8 @@ int main(int argc, char * argv []) {
             cout << "Incorrect number of arguments for option " + option + "!" << endl;
             return 2;
         }
-        Image i1(string(argv[2]));
-        Image i2(string(argv[3]));
+        Image i1( (string(argv[2])) );
+        Image i2( (string(argv[3])) );
 
         outputImg = Image::add(i1, i2);
     }
@@ -41,8 +41,8 @@ int main(int argc, char * argv []) {
             cout << "Incorrect number of arguments for option " + option + "!" << endl;
             return 2;
         }
-        Image i1(string(argv[2]));
-        Image i2(string(argv[3]));
+        Image i1( (string(argv[2])) );
+        Image i2( (string(argv[3])) );
 
         outputImg = Image::subtract(i1, i2);
     }
@@ -52,7 +52,7 @@ int main(int argc, char * argv []) {
             cout << "Incorrect number of arguments for option " + option + "!" << endl;
             return 2;
         }
-        Image i(string(argv[2]));
+        Image i( (string(argv[2])) );
 
         outputImg = Image::invert(i);
     }
@@ -62,8 +62,8 @@ int main(int argc, char * argv []) {
             cout << "Incorrect number of arguments for option " + option + "!" << endl;
             return 2;
         }
-        Image i1(string(argv[2]));
-        Image i2(string(argv[3]));
+        Image i1( (string(argv[2])) );
+        Image i2( (string(argv[3])) );
 
         outputImg = Image::mask(i1, i2);
     }
@@ -73,11 +73,11 @@ int main(int argc, char * argv []) {
             cout << "Incorrect number of arguments for option " + option + "!" << endl;
             return 2;
         }
-        Image i(string(argv[2]));
+        Image i( (string(argv[2])) );
         int t;
 
-        istringstream ss (string(argv[3]));
-        ss >> t;
+        istringstream iss ( (string(argv[3])) );
+        iss >> t;
 
         outputImg = Image::threshold(i, t);
     }

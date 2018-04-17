@@ -21,15 +21,24 @@ namespace WHTMIC023 {
     class Image {
         private:
             int width, height;
-            std::unique_ptr<unsigned char * []> data;
+            std::unique_ptr <unsigned char[]> data;
 
         public:
-            // special member functions
-            Image(string inFile);
+            Image(); // default constructor
 
-            ~Image();
+            Image(string inFile); // file constructor
 
-            // image operations
+            ~Image(); // destructor
+
+            Image(Image& rhs); // copy constructor
+
+            Image(Image&& rhs); // move constructor
+
+            Image& operator=(Image& rhs); // copy assignment operator
+
+            Image& operator=(Image&& rhs); // move assignment operator
+
+            // IMAGE OPERATIONS
 
             static Image& add(Image& i1, Image& i2);
 
@@ -41,11 +50,81 @@ namespace WHTMIC023 {
 
             static Image& threshold(Image& i, int t);
 
-            // output
+            // IO
 
             void save(string outFile);
 
             void load(string inFile);
+
+            // OPERATOR OVERLOADS
+
+            Image& operator+(Image& rhs) { // add
+                return add(*this, rhs);
+            }
+
+            Image& operator-(Image& rhs) { // subtract
+                return subtract(*this, rhs);
+            }
+
+            Image& operator!() { // invert
+                return invert(*this);
+            }
+
+            Image& operator/(Image& rhs) { // mask
+                return mask(*this, rhs);
+            }
+
+            Image& operator*(int rhs) { // threshold
+                return threshold(*this, rhs);
+            }
+
+        // nested iterator class for working with images
+        class iterator {
+            friend Image;
+
+            private:
+                unsigned char *ptr;
+
+                // construct only via Image class (begin/end)
+                iterator(u_char *p) : ptr(p) {}
+
+            public:
+                //copy construct is public
+                iterator( const iterator & rhs) : ptr(rhs.ptr) {}
+                
+                // define overloaded ops: *, ++, --, =
+                iterator & operator=(const iterator & rhs) {
+                    if (this != &rhs)
+                        ptr = rhs.ptr;
+                    return *this;
+                }
+
+                u_char & operator*() {
+                    return *ptr;
+                }
+
+                void operator++() {
+                    ptr++;
+                }
+
+                void operator--() {
+                    ptr--;
+                }
+
+                bool operator==(const iterator & rhs) {
+                    if (*ptr = *(rhs.ptr))
+                        return true;
+
+                    else return false;
+                }
+
+                // other methods for iterator
+
+        };
+
+        iterator begin(void) { return iterator(data.get()); }
+
+        iterator end(void) { return iterator(data.get() + (width * height)); }
     };
 
 

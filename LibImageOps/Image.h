@@ -28,6 +28,8 @@ namespace WHTMIC023 {
 
             Image(string inFile); // file constructor
 
+            Image(std::istringstream& input); // Input stream constructor
+
             ~Image(); // destructor
 
             Image(Image& rhs); // copy constructor
@@ -138,9 +140,6 @@ namespace WHTMIC023 {
                 bool operator==(const iterator & rhs) { // ==
                     return !(*this != rhs);
                 }
-
-                // other methods for iterator
-
         };
         
         iterator begin(void) { return iterator(data.get()); }

@@ -22,17 +22,32 @@ Image::Image() { // default constructor
 }
 
 Image::Image(string inFile) { // file constructor
-    cout << "Creating image" << endl;
+    //cout << "Creating image" << endl;
     load(inFile);
 }
 
+Image::Image(std::istringstream & input) { // input stream constructor
+    int i;
+    input >> i >> std::ws;
+    width = i;
+    height = 1;
+    data = std::unique_ptr<unsigned char []> ( new unsigned char [i] );
+
+    int count = 0;
+    while (!input.eof()) {
+        input >> i >> std::ws;
+        data[count] = (unsigned char) i;
+        count++;
+    }
+}
+
 Image::~Image() { // destructor
-    cout << "Destroying image" << endl;
+    //cout << "Destroying image" << endl;
     data = nullptr;
 }
 
 Image::Image(Image& rhs) { // copy constructor
-    cout << "Copying image" << endl;
+    //cout << "Copying image" << endl;
     data = nullptr;
 
     width = rhs.width;
@@ -48,7 +63,7 @@ Image::Image(Image& rhs) { // copy constructor
 }
 
 Image::Image(Image&& rhs) { // move constructor
-    cout << "Moving image" << endl;
+    //cout << "Moving image" << endl;
     data = nullptr;
 
     std::swap(width, rhs.width);
@@ -57,7 +72,7 @@ Image::Image(Image&& rhs) { // move constructor
 }
 
 Image& Image::operator=(Image& rhs) { // copy assignment operator
-    cout << "Copying image" << endl;
+    //cout << "Copying image" << endl;
     if (this != &rhs) {
         data = nullptr;
 
@@ -76,7 +91,7 @@ Image& Image::operator=(Image& rhs) { // copy assignment operator
 }
 
 Image& Image::operator=(Image&& rhs) { // move assignment operator
-    cout << "Moving image" << endl;
+    //cout << "Moving image" << endl;
     if (this != &rhs) {
         data = nullptr;
 
@@ -92,10 +107,8 @@ Image& Image::operator=(Image&& rhs) { // move assignment operator
 Image Image::add(Image& i1, Image& i2) {
     cout << "Adding images!" << endl;
 
-    if (i1.width != i2.width || i1.height != i2.height) {
-        //throw error
-        cout << "Images are not the same dimensions as required..." << endl;
-        std::exit(1);
+    if (i1.width != i2.width || i1.height != i2.height) { // throw error
+        throw "Images are not the same dimensions as required...";
     }
     
     Image returnImg = i1;
@@ -115,10 +128,8 @@ Image Image::add(Image& i1, Image& i2) {
 Image Image::subtract(Image& i1, Image& i2) {
     cout << "Subtracting images!" << endl;
 
-    if (i1.width != i2.width || i1.height != i2.height) {
-        //throw error
-        cout << "Images are not the same dimensions as required..." << endl;
-        std::exit(1);
+    if (i1.width != i2.width || i1.height != i2.height) { // throw error
+        throw "Images are not the same dimensions as required...";
     }
     
     Image returnImg = i1;
@@ -152,10 +163,8 @@ Image Image::invert(Image& i) {
 Image Image::mask(Image& i1, Image& i2) {
     cout << "Masking image!" << endl;
 
-    if (i1.width != i2.width || i1.height != i2.height) {
-        //throw error
-        cout << "Images are not the same dimensions as required..." << endl;
-        std::exit(1);
+    if (i1.width != i2.width || i1.height != i2.height) { // throw error
+        throw "Images are not the same dimensions as required...";
     }
     
     Image returnImg = i1;

@@ -23,6 +23,7 @@ int main(int argc, char * argv []) {
     cout << "-----------------------------------------------" << endl << endl;
     
     string option = string(argv[1]);
+    Image outputImg;
 
     if (option == "-a") { // option -a: add images
         if (argc != 5) {
@@ -32,8 +33,13 @@ int main(int argc, char * argv []) {
         Image i1( (string(argv[2])) );
         Image i2( (string(argv[3])) );
 
-        Image outputImg = std::move(Image::add(i1, i2));
-
+        try {
+            outputImg = std::move(Image::add(i1, i2));
+        }
+        catch (char const * emsg) {
+            std::cerr << emsg << endl;
+            return 1;
+        }
         cout << "Operation complete!" << endl << endl;
 
         outputImg.save(argv[argc-1]);
@@ -48,7 +54,13 @@ int main(int argc, char * argv []) {
         Image i1( (string(argv[2])) );
         Image i2( (string(argv[3])) );
 
-        Image outputImg = std::move(Image::subtract(i1, i2));
+        try {
+            outputImg = std::move(Image::subtract(i1, i2));
+        }
+        catch (char const * emsg) {
+            std::cerr << emsg << endl;
+            return 1;
+        }
 
         cout << "Operation complete!" << endl << endl;
 
@@ -63,7 +75,7 @@ int main(int argc, char * argv []) {
         }
         Image i( (string(argv[2])) );
 
-        Image outputImg = std::move(Image::invert(i));
+        outputImg = std::move(Image::invert(i));
 
         cout << "Operation complete!" << endl << endl;
 
@@ -79,8 +91,13 @@ int main(int argc, char * argv []) {
         Image i1( (string(argv[2])) );
         Image i2( (string(argv[3])) );
 
-        Image outputImg = std::move(Image::mask(i1, i2));
-
+        try {
+            outputImg = std::move(Image::mask(i1, i2));
+        }
+        catch (char const * emsg) {
+            std::cerr << emsg << endl;
+            return 1;
+        }
         cout << "Operation complete!" << endl << endl;
 
         outputImg.save(argv[argc-1]);
@@ -98,7 +115,7 @@ int main(int argc, char * argv []) {
         istringstream iss ( (string(argv[3])) );
         iss >> t;
 
-        Image outputImg = std::move(Image::threshold(i, t));
+        outputImg = std::move(Image::threshold(i, t));
 
         cout << "Operation complete!" << endl << endl;
 

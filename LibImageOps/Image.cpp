@@ -227,11 +227,17 @@ Image Image::filter(Image& img, Filter g) {
                     else {
                         x = col + j;
                     }
+
                     sum += ( (float) (*(img.data.get() + (y * img.width) + x)) ) * g.getValue(count);
 
                     count++;
                 }
             }
+
+            if (sum > 255)
+                sum = 255;
+            if (sum < 0)
+                sum = 0;
             *(returnImg.data.get() + (row * returnImg.width) + col) = sum;
         }
     }

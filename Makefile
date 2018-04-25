@@ -40,8 +40,8 @@ mask: $(TARGET)
 
 threshold: $(TARGET)
 	export LD_LIBRARY_PATH=$(LIB)/; \
-	./$(TARGET) -t shrek_rectangular.pgm 100 output.pgm
+	./$(TARGET) -t shrek_rectangular.pgm 250 output.pgm
 
 filter: $(TARGET)
 	export LD_LIBRARY_PATH=$(LIB)/; \
-	./$(TARGET) -f donkey_mask.pgm ./sample_filters/all_dir_edge_detect.fir output.pgm
+	./$(TARGET) -f shrek_rectangular.pgm ./sample_filters/all_dir_edge_detect.fir output.pgm

@@ -122,7 +122,21 @@ int main(int argc, char * argv []) {
         outputImg.save(argv[argc-1]);
         cout << "Done!" << endl;
     }
+    else if (option == "-f") { // option -f: filter image
+        if (argc != 5) {
+            cout << "Incorrect number of arguments for option " + option + "!" << endl;
+            return 2;
+        }
+        Image i( (string(argv[2])) );
+        Filter g( (string(argv[3])) );
 
+        outputImg = std::move(Image::filter(i, g));
+
+        cout << "Operation complete!" << endl << endl;
+
+        outputImg.save(argv[argc-1]);
+        cout << "Done!" << endl;
+    }
     else {
         cout << "Unrecognised commandline option!" << endl;
         return 1;

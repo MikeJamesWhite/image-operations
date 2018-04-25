@@ -17,11 +17,11 @@ using namespace std;
 
 TEST_CASE("File IO") {
     Image i;
-    i << "test_files/testimage.pgm";
-    i >> "test_files/testoutput.pgm";
+    i.load("test_files/testimage.pgm");
+    i.save("test_files/testoutput.pgm");
 
     Image i2;
-    i2 << "test_files/testoutput.pgm";
+    std::ifstream("test_files/testoutput.pgm") >> i2;
 
     bool same = true;
     auto iter2 = i2.begin();

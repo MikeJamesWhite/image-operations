@@ -10,6 +10,8 @@
  */
 
 #include <iostream>
+#include <fstream>
+#include <vector>
 #include <string>
 #include <memory>
 #include <sstream>
@@ -17,6 +19,39 @@
 using std::string;
 
 namespace WHTMIC023 {
+
+    class Filter {
+        private:
+            std::vector<float> filterVals;
+            int width;
+
+        public:
+            Filter(std::string filename) {
+                std::ifstream ifs = std::ifstream(filename);
+                float val;
+
+                ifs >> width;
+                int size = width*width;
+
+                filterVals = std::vector<float>();
+                filterVals.reserve(size);
+                for (int i = 0; i < size; i++) {
+                    ifs >> val;
+                    filterVals.push_back(val);
+                }
+                
+                ifs.close();
+            }
+
+            float getValue(int i) {
+                return filterVals[i];
+            }
+
+            int getFilterWidth() {
+                return width;
+            }
+    };
+
 
     class Image {
         private:
@@ -52,6 +87,8 @@ namespace WHTMIC023 {
 
             static Image threshold( Image& i, int f);
 
+            static Image filter( Image& i, Filter g);
+
             // IO
 
             void save(string outFile);
@@ -80,13 +117,13 @@ namespace WHTMIC023 {
                 return threshold(*this, rhs);
             }
 
-            void operator<<(string inFile) {
-                load(inFile);
+            Image operator%( Filter rhs) { // filter
+                return filter(*this, rhs);
             }
 
-            void operator>>(string outFile) {
-                save(outFile);
-            }
+	        friend std::ostream& operator<<(std::ostream& output, Image rhs);
+
+	        friend void operator>>(std::istream& input, Image& rhs);
 
         // nested iterator class for working with images
         class iterator {
@@ -147,6 +184,11 @@ namespace WHTMIC023 {
         iterator end(void) { return iterator(data.get() + (width * height)); }
     };
 
+    // IO Stream operators for image
+
+    std::ostream& operator<<(std::ostream& output, Image rhs);
+
+    void operator>>(std::istream& input, Image& rhs);
 
 }
 

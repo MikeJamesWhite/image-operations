@@ -8,7 +8,6 @@
  */
 
 #include "Image.h"
-#include <fstream>
 
 using namespace WHTMIC023;
 using std::endl;
@@ -195,6 +194,51 @@ Image Image::threshold(Image& i, int f) {
     return returnImg;
 }
 
+Image Image::filter(Image& img, Filter g) {
+    cout << "Filtering image!" << endl;
+
+    // set up returnImg
+    Image returnImg;
+    returnImg.width = img.width;
+    returnImg.height = img.height;
+    returnImg.data = std::unique_ptr<unsigned char []> ( new unsigned char [returnImg.width * returnImg.height] );
+
+    // filter the return image
+    for (int row = 0; row < returnImg.height; row++) {
+        for (int col = 0; col < returnImg.width; col++) {
+            
+            int count = 0;
+            int halfFilterWidth = g.getFilterWidth() / 2;
+            float sum = 0.0f;
+            for (int i = -halfFilterWidth; i < halfFilterWidth + 1; i++) {
+                int y;
+                if (row + i < 0  || row + i > returnImg.height) { // reflect y
+                    y = row - i;
+                }
+                else {
+                    y = row + i;
+                }
+
+                for (int j = -halfFilterWidth; j < halfFilterWidth + 1; j++) {
+                    int x;
+                    if (col + j < 0  || col + halfFilterWidth > returnImg.width) { // reflect x
+                        x = col - j;
+                    }
+                    else {
+                        x = col + j;
+                    }
+                    sum += ( (float) (*(img.data.get() + (y * img.width) + x)) ) * g.getValue(count);
+
+                    count++;
+                }
+            }
+            *(returnImg.data.get() + (row * returnImg.width) + col) = sum;
+        }
+    }
+
+    return returnImg;
+}
+
 // File IO
 
 void Image::save(string outFile) {
@@ -202,15 +246,7 @@ void Image::save(string outFile) {
     cout << "Width: " << width << ", Height: " << height << endl;
 
     std::ofstream output = std::ofstream(outFile, std::ios_base::binary);
-
-    // write header
-    output << "P5" << endl;
-    output << std::to_string(width) << " " << std::to_string(height) << endl;
-    output << "255" << endl;
-
-    // write binary data
-    cout << "writing " << std::to_string(width*height) << " bytes" << endl << endl;
-    output.write(reinterpret_cast<const char*> (data.get()), width*height);
+    output << *this;
 
     output.close();
 }
@@ -219,8 +255,29 @@ void Image::load(string inFile) {
     cout << "Loading image from " << inFile << endl;
 
     std::ifstream input = std::ifstream(inFile,std::ios_base::binary);
+    input >> *this;
+
+    input.close();
+}
+
+// IO Stream Operators
+
+std::ostream& WHTMIC023::operator<<(std::ostream& output, Image rhs) {
+    // write header
+    output << "P5" << std::endl;
+    output << std::to_string(rhs.width) << " " << std::to_string(rhs.height) << std::endl;
+    output << "255" << std::endl;
+
+    // write binary data
+    std::cout << "writing " << std::to_string(rhs.width*rhs.height) << " bytes" << std::endl << std::endl;
+    output.write(reinterpret_cast<const char*> (rhs.data.get()), rhs.width*rhs.height);
+
+    return output;
+}
+
+void WHTMIC023::operator>>(std::istream& input, Image& rhs) {
     string s = "";
-    data = nullptr;
+    rhs.data = nullptr;
 
     // discard header lines
     std::getline(input, s);
@@ -231,16 +288,14 @@ void Image::load(string inFile) {
 
     // parse height and width
     std::istringstream iss = std::istringstream( s );
-    iss >> width;
-    iss >> height;
-    data = std::unique_ptr<unsigned char []> ( new unsigned char [width * height] );
-    cout << "Width: " << width << ", Height: " << height << endl;
+    iss >> rhs.width;
+    iss >> rhs.height;
+    rhs.data = std::unique_ptr<unsigned char []> ( new unsigned char [rhs.width * rhs.height] );
+    std::cout << "Width: " << rhs.width << ", Height: " << rhs.height << std::endl;
 
     std::getline(input, s);
 
     // read binary data
-    cout << "reading " << std::to_string(width*height) << " bytes" << endl << endl;
-    input.read(reinterpret_cast<char*> (data.get()), width * height);
-
-    input.close();
+    std::cout << "reading " << std::to_string(rhs.width*rhs.height) << " bytes" << std::endl << std::endl;
+    input.read(reinterpret_cast<char*> (rhs.data.get()), rhs.width * rhs.height);
 }

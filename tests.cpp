@@ -40,7 +40,6 @@ TEST_CASE("File IO") {
     REQUIRE(same);
 }
 
-
 // Iterator methods & operators
 
 TEST_CASE("Iterator") {
@@ -79,7 +78,10 @@ TEST_CASE("Iterator") {
     }
 
     SECTION("Equality") {
-        
+        auto iter2 = iter;
+        REQUIRE(iter == iter2);
+        iter2++;
+        REQUIRE(iter != iter2);
     }
 }
 
@@ -198,7 +200,19 @@ TEST_CASE("Image Operations") {
         REQUIRE(*iter == 255 - 16);
     }
     SECTION("Filtering") {
-        // TO DO
+        istringstream s2("5 120 126 170 200 250");
+        Image j (s2);
+        Image k = Image::filter(j, Filter("./sample_filters/unity.fir"));
+        auto iter = k.begin();
+        REQUIRE(*iter == 120);
+        iter++;
+        REQUIRE(*iter == 126);
+        iter++;
+        REQUIRE(*iter == 170);
+        iter++;
+        REQUIRE(*iter == 200);
+        iter++;
+        REQUIRE(*iter == 250);
     }
 }
 
@@ -281,6 +295,19 @@ TEST_CASE("Image Operator Overloads") {
         REQUIRE(*iter == 255 - 16);
     }
     SECTION("Filtering") {
-        // TO DO
+        istringstream s2("5 120 126 170 200 250");
+        Image j (s2);
+        Image k = j % Filter("./sample_filters/unity.fir");
+        auto iter = k.begin();
+        REQUIRE(*iter == 120);
+        iter++;
+        REQUIRE(*iter == 126);
+        iter++;
+        REQUIRE(*iter == 170);
+        iter++;
+        REQUIRE(*iter == 200);
+        iter++;
+        REQUIRE(*iter == 250);
+
     }
 }

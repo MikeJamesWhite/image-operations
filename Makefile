@@ -44,4 +44,4 @@ threshold: $(TARGET)
 
 filter: $(TARGET)
 	export LD_LIBRARY_PATH=$(LIB)/; \
-	./$(TARGET) -f shrek_rectangular.pgm ./sample_filters/all_dir_edge_detect.fir output.pgm
+	./$(TARGET) -f Lenna_standard.pgm ./sample_filters/all_dir_edge_detect.fir output.pgm

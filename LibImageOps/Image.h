@@ -123,7 +123,7 @@ namespace WHTMIC023 {
 
 	        friend std::ostream& operator<<(std::ostream& output, Image rhs);
 
-	        friend void operator>>(std::istream& input, Image& rhs);
+	        friend std::istream& operator>>(std::istream& input, Image& rhs);
 
         // nested iterator class for working with images
         class iterator {
@@ -188,7 +188,7 @@ namespace WHTMIC023 {
 
     std::ostream& operator<<(std::ostream& output, Image rhs);
 
-    void operator>>(std::istream& input, Image& rhs);
+    std::istream& operator>>(std::istream& input, Image& rhs);
 
 }
 

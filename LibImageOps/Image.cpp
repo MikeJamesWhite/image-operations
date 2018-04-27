@@ -213,7 +213,12 @@ Image Image::filter(Image& img, Filter g) {
             for (int i = -halfFilterWidth; i < halfFilterWidth + 1; i++) {
                 int y;
                 if (row + i < 0  || row + i > returnImg.height) { // reflect y
-                    y = row - i;
+                    if (row + i < 0 && row + i > returnImg.height) {
+                        y = row;
+                    }
+                    else {
+                        y = row - i;
+                    }
                 }
                 else {
                     y = row + i;
@@ -281,7 +286,7 @@ std::ostream& WHTMIC023::operator<<(std::ostream& output, Image rhs) {
     return output;
 }
 
-void WHTMIC023::operator>>(std::istream& input, Image& rhs) {
+std::istream& WHTMIC023::operator>>(std::istream& input, Image& rhs) {
     string s = "";
     rhs.data = nullptr;
 
@@ -304,4 +309,6 @@ void WHTMIC023::operator>>(std::istream& input, Image& rhs) {
     // read binary data
     std::cout << "reading " << std::to_string(rhs.width*rhs.height) << " bytes" << std::endl << std::endl;
     input.read(reinterpret_cast<char*> (rhs.data.get()), rhs.width * rhs.height);
+
+    return input;
 }

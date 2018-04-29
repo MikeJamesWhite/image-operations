@@ -21,7 +21,6 @@ Image::Image() { // default constructor
 }
 
 Image::Image(string inFile) { // file constructor
-    //cout << "Creating image" << endl;
     load(inFile);
 }
 
@@ -41,12 +40,10 @@ Image::Image(std::istringstream & input) { // input stream constructor
 }
 
 Image::~Image() { // destructor
-    //cout << "Destroying image" << endl;
     data = nullptr;
 }
 
 Image::Image(Image& rhs) { // copy constructor
-    //cout << "Copying image" << endl;
     data = nullptr;
 
     width = rhs.width;
@@ -62,7 +59,6 @@ Image::Image(Image& rhs) { // copy constructor
 }
 
 Image::Image(Image&& rhs) { // move constructor
-    //cout << "Moving image" << endl;
     data = nullptr;
 
     std::swap(width, rhs.width);
@@ -71,7 +67,6 @@ Image::Image(Image&& rhs) { // move constructor
 }
 
 Image& Image::operator=(Image& rhs) { // copy assignment operator
-    //cout << "Copying image" << endl;
     if (this != &rhs) {
         data = nullptr;
 
@@ -90,7 +85,6 @@ Image& Image::operator=(Image& rhs) { // copy assignment operator
 }
 
 Image& Image::operator=(Image&& rhs) { // move assignment operator
-    //cout << "Moving image" << endl;
     if (this != &rhs) {
         data = nullptr;
 
@@ -116,7 +110,7 @@ Image Image::add(Image& i1, Image& i2) {
     for (auto iter2 = i2.begin(); iter2 != i2.end(); iter2++) {
         int i = *iter2 + *iter1;
         if (i > 255)
-            *iter1 = (u_char) 255;
+            *iter1 = (u_char) 255; // clamp value to <= 255
         else
             *iter1 += *iter2;
         iter1++;
@@ -137,7 +131,7 @@ Image Image::subtract(Image& i1, Image& i2) {
     for (auto iter2 = i2.begin(); iter2 != i2.end(); iter2++) {
         int i = *iter1 - *iter2;
         if (i < 0)
-            *iter1 = (u_char) 0;
+            *iter1 = (u_char) 0; // clamp value to >= 0
         else
             *iter1 -= *iter2;
         iter1++;
@@ -239,10 +233,12 @@ Image Image::filter(Image& img, Filter g) {
                 }
             }
 
+            // clamp to 0 <= sum <= 255
             if (sum > 255)
                 sum = 255;
             if (sum < 0)
                 sum = 0;
+            
             *(returnImg.data.get() + (row * returnImg.width) + col) = sum;
         }
     }
